@@ -1,0 +1,68 @@
+generator client {
+  provider  = "prisma-client-py"
+  interface = "asyncio"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  updated_at            DateTime? @updatedAt
+  sub                   String    @id @unique
+  email                 String?   @unique
+  name                  String
+  given_name            String?
+  family_name           String?
+  middle_name           String?
+  nickname              String?
+  preferred_username    String?
+  profile               String?
+  picture               String?
+  website               String?
+  gender                String?
+  birthdate             String?
+  zoneinfo              String?
+  locale                String?
+  phone_number          String?
+  address               String?
+  phone_number_verified Boolean?
+  email_verified        Boolean?
+  profile_info          Profile?
+  upload                Upload[]
+
+  @@index([email, sub, gender])
+}
+
+model Upload {
+  id          String    @id @default(uuid())
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @updatedAt
+  filename    String?
+  contentType String?
+  url         String    @unique
+  sub         String?
+  user        User?     @relation(fields: [sub], references: [sub])
+
+  @@index([filename, sub, contentType])
+}
+
+model Profile {
+  id         String    @id @default(uuid())
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+  sub        String    @unique
+  skills     Json[]
+  jobs       Json[]
+  education  Json[]
+  theme      Json?
+  bio        String?
+  location   String?
+  email      String?
+  name       String?
+  picture    String?
+  user       User      @relation(fields: [sub], references: [sub])
+
+  @@index([sub, email, name, skills, jobs, education, location])
+}

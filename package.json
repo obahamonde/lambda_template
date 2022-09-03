@@ -1,0 +1,11 @@
+{
+  "name": "stack",
+  "version": "1.0.0",
+  "main": "api/main.py",
+  "license": "MIT",
+  "author": "obahamonde[github]",
+  "scripts": {
+    "dev": "export PYTHONDONTWRITEBYTECODE=1 && uvicorn api.main:app --reload --port 80 --host 0.0.0.0",
+    "build": "docker compose up -d --build"
+  }
+}
